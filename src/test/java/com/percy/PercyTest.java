@@ -2,6 +2,7 @@ package com.percy;
 
 import org.openqa.selenium.By;
 import org.openqa.selenium.Dimension;
+import org.openqa.selenium.MutableCapabilities;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
 import org.openqa.selenium.remote.RemoteWebDriver;
@@ -15,6 +16,7 @@ import io.percy.selenium.Percy;
 
 import java.net.URL;
 import java.time.Duration;
+import java.util.HashMap;
 
 class PercyTest {
 
@@ -30,17 +32,20 @@ class PercyTest {
     @BeforeMethod(alwaysRun = true)
     @SuppressWarnings("unchecked")
     public void setUp() throws Exception {
-        ChromeOptions options = new ChromeOptions();
-        options.setCapability("browserName", "Chrome");
-        options.setCapability("projectName","My Project");
-        options.setCapability("buildName","test percy_screenshot");
-        options.setCapability("sessionName","Percy first_test");
-        options.setCapability("local","false");
-        options.setCapability("seleniumVersion","3.141");
-        options.setCapability("browserVersion", "latest");
-        options.setCapability("os", "Windows");
-        options.setCapability("os_version", "11");
-        driver = new RemoteWebDriver(new URL(URL), options);
+        MutableCapabilities capabilities = new MutableCapabilities();
+        HashMap<String, Object> bstackOptions = new HashMap<String, Object>();
+        capabilities.setCapability("browserName", "Chrome");
+        bstackOptions.put("os", "Windows");
+        bstackOptions.put("osVersion", "10");
+        bstackOptions.put("browserVersion", "120.0");
+        bstackOptions.put("consoleLogs", "info");
+        bstackOptions.put("seleniumVersion", "4.20.0");
+        bstackOptions.put("projectName", "My Project");
+        bstackOptions.put("buildName", "test percy_screenshot");
+        bstackOptions.put("sessionName", "Percy first_test");
+        capabilities.setCapability("bstack:options", bstackOptions);
+
+        driver = new RemoteWebDriver(new URL(URL), capabilities);
     }
 
     @AfterMethod(alwaysRun = true)
